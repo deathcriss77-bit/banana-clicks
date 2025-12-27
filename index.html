@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Banana Click 🍌</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f7f7f7;
+    }
+
+    img {
+      width: 200px;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    img:active {
+      transform: scale(0.95);
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+
+    .ranking {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🍌 Banana Click 🍌</h1>
+  <p>Puntos: <span id="points">0</span></p>
+
+  <img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg" id="banana">
+
+  <div class="ranking">
+    <h2>🏆 Ranking</h2>
+    <ol id="rankingList"></ol>
+  </div>
+
+<script>
+  let username = localStorage.getItem("username");
+
+  if (!username) {
+    username = prompt("Ingresa tu nombre:");
+    localStorage.setItem("username", username);
+  }
+
+  let scores = JSON.parse(localStorage.getItem("scores")) || {};
+  let points = scores[username] || 0;
+
+  const pointsSpan = document.getElementById("points");
+  pointsSpan.textContent = points;
+
+  document.getElementById("banana").addEventListener("click", () => {
+    points++;
+    scores[username] = points;
+    localStorage.setItem("scores", JSON.stringify(scores));
+    pointsSpan.textContent = points;
+    updateRanking();
+  });
+
+  function updateRanking() {
+    const rankingList = document.getElementById("rankingList");
+    rankingList.innerHTML = "";
+
+    const sorted = Object.entries(scores)
+      .sort((a, b) => b[1] - a[1]);
+
+    sorted.forEach(([name, score]) => {
+      const li = document.createElement("li");
+      li.textContent = `${name}: ${score} clicks`;
+      rankingList.appendChild(li);
+    });
+  }
+
+  updateRanking();
+</script>
+
+</body>
+</html>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3101160675809889"
+     crossorigin="anonymous"></script>
